@@ -1,0 +1,39 @@
+.dashboard {
+  max-width: 1100px;
+  margin: 2% auto;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+.filter-box {
+  margin-bottom: 1.5rem;
+}
+.filter-box select, .filter-box button {
+  padding: 0.6rem 1rem;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+.filter-box button {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+}
+.section {
+  margin-top: 2rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  text-align: left;
+}
+th {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find Matches | LifeLine+</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>🔍 Find Organ Matches</h2>
+    <form id="matchForm">
+      <select id="matchOrgan" required>
+        <option value="">Select Organ</option>
+        <option value="Kidney">Kidney</option>
+        <option value="Liver">Liver</option>
+        <option value="Heart">Heart</option>
+        <option value="Lungs">Lungs</option>
+      </select>
+
+      <select id="matchBlood" required>
+        <option value="">Select Blood Group</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+      </select>
+
+      <input type="text" id="matchCity" placeholder="City (optional)" />
+
+      <button type="submit">Find Matches</button>
+    </form>
+
+    <div class="section">
+      <h3>✅ Matching Donors</h3>
+      <table id="donorMatches">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Organ</th>
+            <th>Blood</th>
+            <th>City</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>🚨 Matching Recipients</h3>
+      <table id="recipientMatches">
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Organ</th>
+            <th>Blood</th>
+            <th>Hospital</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    const db = firebase.firestore();
+
+    document.getElementById("matchForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const organ = document.getElementById("matchOrgan").value;
+      const blood = document.getElementById("matchBlood").value;
+      const city = document.getElementById("matchCity").value.trim().toLowerCase();
+
+      // Fetch Donor Matches
+      let donorQuery = db.collection("donors")
+        .where("organ", "==", organ)
+        .where("bloodGroup", "==", blood);
+
+      donorQuery.get().then(snapshot => {
+        const table = document.getElementById("donorMatches").getElementsByTagName("tbody")[0];
+        table.innerHTML = "";
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          if (!city || d.city.toLowerCase().includes(city)) {
+            table.innerHTML += `
+              <tr>
+                <td>${d.name}</td>
+                <td>${d.organ}</td>
+                <td>${d.bloodGroup}</td>
+                <td>${d.city}</td>
+                <td>${d.contact}</td>
+              </tr>`;
+          }
+        });
+      });
+
+      // Fetch Recipient Matches
+      let recipientQuery = db.collection("recipients")
+        .where("requiredOrgan", "==", organ)
+        .where("bloodGroup", "==", blood);
+
+      recipientQuery.get().then(snapshot => {
+        const table = document.getElementById("recipientMatches").getElementsByTagName("tbody")[0];
+        table.innerHTML = "";
+        snapshot.forEach(doc => {
+          const r = doc.data();
+          if (!city || r.city.toLowerCase().includes(city)) {
+            table.innerHTML += `
+              <tr>
+                <td>${r.patientName}</td>
+                <td>${r.requiredOrgan}</td>
+                <td>${r.bloodGroup}</td>
+                <td>${r.hospital}</td>
+                <td>${r.contact}</td>
+              </tr>`;
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

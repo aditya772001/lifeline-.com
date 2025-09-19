@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LifeLine+ | Login or Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="auth-container">
+    <h2>Welcome to LifeLine+</h2>
+    <p>Please sign up or log in to continue</p>
+
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <div class="auth-buttons">
+      <button onclick="register()">Sign Up</button>
+      <button onclick="login()">Log In</button>
+    </div>
+
+    <p id="message" class="auth-message"></p>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
